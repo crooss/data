@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CENAGAS-CYP</title>
+    <meta charset="UTF-8" />
+    
+    <!-- <link rel="stylesheet" href="./CSS/styles.css">  -->
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/alpha/pyscript.js" charset="utf-8"></script>
+    <script src="https://cdn.plot.ly/plotly-2.29.1.min.js" charset="utf-8"></script>
+
+    <py-env>
+        - pandas
+        - plotly.express
+    </py-env>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+  </head>
+
+<body>
+  <style>* {
+    box-sizing: border-box;
+  }
+  
+  /* Create two equal columns that floats next to each other */
+  .column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+    height: 300px; /* Should be removed. Only for demonstration */
+  }
+  
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }</style>
+
+<div class="row">
+  <div class="column">
+    <h2>Gráfico Sunburst</h2>
+    <py-script>
+      import pandas as pd
+      import plotly.express as px
+      from pyodide.http import open_url
+      
+      <!-- print('hola mundo') -->
+      url="https://raw.githubusercontent.com/crooss/data/main/data_nombres.csv"
+      df=pd.read_csv(open_url(url), sep=',', encoding='utf-8')
+      
+      fig=px.sunburst(data_frame=df,
+                      path=['PROY','Residencia','MES LETRA','ACT'],
+                      values='MONTO',
+                      hover_data=['MONTO','CANT', 'UNIDAD'],
+                      width=800, 
+                      height=800, 
+                      color_discrete_sequence=px.colors.qualitative.Prism)
+      fig
+          </py-script>
+  </div>
+  <div class="column">
+  <h2>Gráfico TreeMap</h2>
+  <py-script>
+    import pandas as pd
+    import plotly.express as px
+    from pyodide.http import open_url
+    
+    <!-- print('hola mundo') -->
+    url="https://raw.githubusercontent.com/crooss/data/main/data_nombres.csv"
+    df=pd.read_csv(open_url(url), sep=',', encoding='latin')
+    
+    fig=px.treemap(data_frame=df,
+                    path=['PROY','Residencia','ACT'],
+                    values='MONTO',
+                    hover_data=['MONTO','CANT', 'UNIDAD'],
+                    width=800, 
+                    height=800, 
+                    color_discrete_sequence=px.colors.qualitative.Prism)
+    fig
+        </py-script>
+  </div>
+</div>
+</body>
+</html>
